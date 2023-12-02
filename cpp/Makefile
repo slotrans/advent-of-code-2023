@@ -1,3 +1,5 @@
+# https://tech.davis-hansson.com/p/make/
+
 SHELL := zsh
 .ONESHELL:
 .SHELLFLAGS := -eu -o pipefail -c
