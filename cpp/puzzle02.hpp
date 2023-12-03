@@ -14,6 +14,11 @@ struct CubeSet {
     int blue = 0;
     //
     bool operator==(const CubeSet&) const = default;
+    //
+    public:
+    int power() {
+        return red * green * blue;
+    }
 } ;
 
 struct Game {
@@ -87,4 +92,35 @@ int P1Answer(const string &filename) {
     }
 
     return gameIdTotal;
+}
+
+CubeSet FewestPossibleCubes(const Game &game) {
+    CubeSet minimums;
+
+    for(CubeSet cube_set : game.cubeSets) {
+        if(cube_set.red > minimums.red) {
+            minimums.red = cube_set.red;
+        }
+        if(cube_set.green > minimums.green) {
+            minimums.green = cube_set.green;
+        }
+        if(cube_set.blue > minimums.blue) {
+            minimums.blue = cube_set.blue;
+        }
+    }
+
+    return minimums;
+}
+
+int P2Answer(const string &filename) {
+    vector<string> lines = ReadFileAsLines(filename);
+
+    int powerTotal = 0;
+    for(string line : lines) {
+        Game tempGame = ParseGame(line);
+        CubeSet minimums = FewestPossibleCubes(tempGame);
+        powerTotal += minimums.power();
+    }
+
+    return powerTotal;
 }

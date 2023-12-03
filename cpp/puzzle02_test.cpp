@@ -45,6 +45,45 @@ TEST_CASE("possibility check for each sample game against the sample reference c
     REQUIRE( IsGamePossible(game5, referenceCubes) == true );
 }
 
-TEST_CASE("answer for sample", "[part1]") {
+TEST_CASE("p1 answer for sample", "[part1]") {
     REQUIRE( P1Answer("../input/sample02") == 8 );
+}
+
+/*
+    In game 1, the game could have been played with as few as 4 red, 2 green, and 6 blue cubes. If any color had even one fewer cube, the game would have been impossible.
+    Game 2 could have been played with a minimum of 1 red, 3 green, and 4 blue cubes.
+    Game 3 must have been played with at least 20 red, 13 green, and 6 blue cubes.
+    Game 4 required at least 14 red, 3 green, and 15 blue cubes.
+    Game 5 needed no fewer than 6 red, 3 green, and 2 blue cubes in the bag.
+*/
+
+CubeSet fewest1 = {.red=4, .green=2, .blue=6};
+CubeSet fewest2 = {.red=1, .green=3, .blue=4};
+CubeSet fewest3 = {.red=20, .green=13, .blue=6};
+CubeSet fewest4 = {.red=14, .green=3, .blue=15};
+CubeSet fewest5 = {.red=6, .green=3, .blue=2};
+
+TEST_CASE("fewest possible cubes for each sample game", "[part2]") {
+    REQUIRE( FewestPossibleCubes(game1) == fewest1 );
+    REQUIRE( FewestPossibleCubes(game2) == fewest2 );
+    REQUIRE( FewestPossibleCubes(game3) == fewest3 );
+    REQUIRE( FewestPossibleCubes(game4) == fewest4 );
+    REQUIRE( FewestPossibleCubes(game5) == fewest5 );
+}
+
+/*
+The power of a set of cubes is equal to the numbers of red, green, and blue cubes multiplied together.
+The power of the minimum set of cubes in game 1 is 48. In games 2-5 it was 12, 1560, 630, and 36, respectively.
+*/
+
+TEST_CASE("power calculations", "[part2]") {
+    REQUIRE( fewest1.power() == 48 );
+    REQUIRE( fewest2.power() == 12);
+    REQUIRE( fewest3.power() == 1560);
+    REQUIRE( fewest4.power() == 630);
+    REQUIRE( fewest5.power() == 36);
+}
+
+TEST_CASE("p2 answer for sample", "[part2]") {
+    REQUIRE( P2Answer("../input/sample02") == 2286 );
 }
