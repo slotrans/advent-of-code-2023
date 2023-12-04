@@ -50,3 +50,21 @@ run_puzzle02: puzzle02
 
 puzzle02: aocutil.hpp puzzle02.hpp puzzle02.cpp
 > $(CC) puzzle02.cpp -o $@
+
+
+## 03 #########################################################################
+clean_puzzle03:
+> rm -f puzzle03 puzzle03_test
+.PHONE: clean_puzzle03
+
+run_puzzle03_test: puzzle03_test
+> ./puzzle03_test
+
+puzzle03_test: aocutil.hpp puzzle03.hpp puzzle03_test.cpp
+> $(CC) puzzle03_test.cpp -o $@
+
+run_puzzle03: puzzle03
+> ./puzzle03
+
+puzzle03: aocutil.hpp puzzle03.hpp puzzle03.cpp
+> $(CC) puzzle03.cpp -o $@
