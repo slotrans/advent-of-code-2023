@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <unordered_set>
+#include <unordered_map>
 #include <cmath>
 #include <pystring.h>
 #include "aocutil.hpp"
@@ -8,10 +9,12 @@
 using std::string;
 using std::vector;
 using std::unordered_set;
+using std::unordered_map;
 
 
 struct ScratchCard {
     int cardNum;
+    int copies = 1;
     unordered_set<int> winningNumbers;
     vector<int> numbersYouHave;
     //
@@ -54,8 +57,7 @@ ScratchCard ParseCard(const string &line) {
     return card;
 }
 
-int CardScore(const ScratchCard &card) {
-    int points = 0;
+int NumWinners(const ScratchCard &card) {
     vector<int> winners;
 
     for(int num_to_check : card.numbersYouHave) {
@@ -63,8 +65,16 @@ int CardScore(const ScratchCard &card) {
             winners.push_back(num_to_check);
         }
     }
-    if(winners.size() > 0) {
-        points = pow(2, winners.size()-1);
+
+    return winners.size();
+}
+
+int CardScore(const ScratchCard &card) {
+    int points = 0;
+
+    int num_winners = NumWinners(card);
+    if(num_winners > 0) {
+        points = pow(2, num_winners-1);
     }
 
     return points;
@@ -82,4 +92,44 @@ int SumOfPoints(const string &filename) {
     }
 
     return total_points;
+}
+
+void ApplyWinnings(const ScratchCard &card, unordered_map<int, ScratchCard> &cardDeck, int n_times) {
+    int num_winners = NumWinners(card);
+
+    //e.g. Card 1 has 4 winners, so loop through cards 2,3,4,5 and add a copy of each
+    for(int i = 1; i <= num_winners; i++) {
+        if(cardDeck.contains(card.cardNum+i)) {
+            cardDeck[card.cardNum+i].copies += n_times;
+        }
+    }
+}
+
+int PlayP2Game(const string &filename) {
+    vector<string> lines = ReadFileAsLines(filename);
+
+    unordered_map<int, ScratchCard> cardDeck;
+    int min_card_num = 999999999;
+    int max_card_num = 0;
+    for(string line : lines) {
+        ScratchCard card = ParseCard(line);
+        cardDeck[card.cardNum] = card;
+
+        if(card.cardNum < min_card_num) {
+            min_card_num = card.cardNum;
+        }
+        if(card.cardNum > max_card_num) {
+            max_card_num = card.cardNum;
+        }
+    }
+
+    for(int i = min_card_num; i <= max_card_num; i++) {
+        ApplyWinnings(cardDeck[i], cardDeck, cardDeck[i].copies);
+    }
+
+    int total_cards = 0;
+    for(int i = min_card_num; i <= max_card_num; i++) {
+        total_cards += cardDeck[i].copies;
+    }
+    return total_cards;
 }
