@@ -5,3 +5,5 @@ I don't actually know C++ so I'm sure I'm doing tons of wrong stuff.
 - fmt 10.1.1 because clang hasn't implemented std::format yet
 - pystring 1.1.4 because life is too short to write your own string functions
 
+2023-11-24: I totally lost interest this year. Oh well.
+
